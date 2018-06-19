@@ -34,8 +34,53 @@ const (
 const (
 	defaultLogLevel        logging.Lvl = logging.LvlInfo
 	defaultSebakLogLevel   logging.Lvl = logging.LvlDebug
-	defaultDockerImageName string      = "boscoin/sebak/compose-network:latest"
+	defaultDockerImageName string      = "boscoin/sebak-network-composer:latest"
 )
+
+type FlagEnv []string
+
+func (f *FlagEnv) Type() string {
+	return "env"
+}
+
+func (f *FlagEnv) String() string {
+	return ""
+}
+
+func (f *FlagEnv) Set(v string) error {
+	parsed := strings.SplitN(v, "=", 2)
+	if len(parsed) != 2 {
+		return errors.New("invalid env")
+	}
+
+	*f = append(*f, v)
+
+	return nil
+}
+
+type FlagVolume map[string]string
+
+func (f *FlagVolume) Type() string {
+	return "volume"
+}
+
+func (f *FlagVolume) String() string {
+	return ""
+}
+
+func (f *FlagVolume) Set(v string) error {
+	parsed := strings.SplitN(v, ":", 2)
+	if len(parsed) != 2 {
+		return errors.New("invalid volume")
+	}
+
+	n := map[string]string(*f)
+	n[parsed[0]] = parsed[1]
+
+	*f = n
+
+	return nil
+}
 
 var (
 	cmd        *cobra.Command
@@ -47,6 +92,8 @@ var (
 	flagSebakLogLevel string = defaultSebakLogLevel.String()
 	flagImageName     string = defaultDockerImageName
 	flagForceClean    bool   = false
+	flagVolume        FlagVolume
+	flagEnv           FlagEnv
 )
 
 func PrintError(err error) {
@@ -166,13 +213,12 @@ func runContainer(cli *client.Client, genesisKeypair *keypair.Full, node *sebakc
 		fmt.Sprintf("SEBAK_ENDPOINT=%s", node.Endpoint()),
 		fmt.Sprintf("SEBAK_GENESIS_BLOCK=%s", genesisKeypair.Seed()),
 		fmt.Sprintf("SEBAK_VALIDATORS=%s", strings.Join(env_validators, " ")),
+		fmt.Sprintf("SEBAK_NODE_ALIAS=%s", node.Alias()),
 	}
+	envs = append(envs, flagEnv...)
 
-	volumes := map[string]string{
-		"/home/ubuntu/a/entrypoint.sh": "/entrypoint.sh",
-	}
 	var mounts []mount.Mount
-	for s, t := range volumes {
+	for s, t := range flagVolume {
 		m := mount.Mount{Type: mount.TypeBind, Source: s, Target: t}
 		mounts = append(mounts, m)
 	}
@@ -185,7 +231,7 @@ func runContainer(cli *client.Client, genesisKeypair *keypair.Full, node *sebakc
 		ExposedPorts: nat.PortSet{nat.Port(port): {}},
 		Tty:          false,
 		OpenStdin:    false,
-		Entrypoint:   []string{"/bin/bash", "/entrypoint.sh"},
+		Entrypoint:   []string{"/bin/sh", "/entrypoint.sh"},
 		Env:          envs,
 	}
 	containerHostConfig := &container.HostConfig{
@@ -295,6 +341,8 @@ func init() {
 	}
 	defer cli.Close()
 
+	flagVolume = FlagVolume{}
+
 	cmd = &cobra.Command{
 		Use:   os.Args[0],
 		Short: "sebak composing network",
@@ -359,6 +407,9 @@ func init() {
 				)
 			}
 
+			for _, node := range nodes {
+				log.Debug("launch node", "alias", node.Alias(), "endpoint", node.Endpoint())
+			}
 		},
 	}
 
@@ -377,6 +428,8 @@ func init() {
 		flagSebakLogLevel,
 		"sebak log level, {crit, error, warn, info, debug}",
 	)
+	cmd.Flags().Var(&flagVolume, "volume", "set volume: '<from host>:<to container>'")
+	cmd.Flags().Var(&flagEnv, "env", "set environment variable: '<KEY>=<value>'")
 }
 
 func main() {
