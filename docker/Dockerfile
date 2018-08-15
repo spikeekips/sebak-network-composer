@@ -22,10 +22,10 @@ RUN go install boscoin.io/sebak/cmd/sebak
 FROM golang:alpine as final
 
 COPY --from=builder /go/bin/sebak /sebak
-Add ./docker/sebak.crt /sebak.crt
-Add ./docker/sebak.key /sebak.key
+Add ./sebak.crt /sebak.crt
+Add ./sebak.key /sebak.key
 
-ADD ./docker/entrypoint.sh /entrypoint.sh
+ADD ./entrypoint.sh /entrypoint.sh
 
 RUN ( \
     chmod 755 /entrypoint.sh; \
