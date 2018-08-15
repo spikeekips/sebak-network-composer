@@ -200,7 +200,7 @@ func runContainer(cli *client.Client, genesisKeypair *keypair.Full, node *sebakc
 
 	var env_validators []string
 	for _, v := range node.GetValidators() {
-		s := fmt.Sprintf("%s,%s,%s", v.Address(), v.Endpoint(), v.Alias())
+		s := fmt.Sprintf("%s?address=%s&alias=%s", v.Endpoint(), v.Address(), v.Alias())
 		env_validators = append(env_validators, s)
 	}
 
