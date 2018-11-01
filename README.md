@@ -8,6 +8,12 @@ $ go get github.com/spikeekips/sebak-network-composer
 
 ## Usage
 
+Build image first
+```sh
+$ cd docker
+$ docker build -t boscoin/sebak-network-composer:latest .
+```
+
 ```sh
 $ sebak-network-composer \
     --force \

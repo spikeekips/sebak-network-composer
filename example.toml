@@ -1,0 +1,24 @@
+docker-path = "./docker"
+
+# SCRRCYK5IFL23GEIIXW5MPXHSBX5O3KQEFT6RXOXXANQ3S6DL6YJ7P27
+# GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ
+genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
+
+[hosts]
+  [hosts.seoul0]
+  host = "tcp://54.180.8.229:2376"
+  cert = "~/.docker/machine/machines/ex-seoul0"
+  volume = [
+    "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
+  ]
+  env = [
+    "SEBAK_RATE_LIMIT_API=0-s",
+    "SEBAK_RATE_LIMIT_NODE=0-s"
+  ]
+
+  [hosts.seoul1]
+  host = "tcp://52.79.243.48:2376"
+  cert = "~/.docker/machine/machines/ex-seoul1"
+  volume = [
+    "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
+  ]

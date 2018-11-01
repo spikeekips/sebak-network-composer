@@ -13,17 +13,14 @@ RUN ( \
     echo en_US.UTF-8 UTF-8 > /etc/locale.gen && locale-gen; \
 )
 
-RUN go get github.com/golang/dep/cmd/dep
-
-WORKDIR /go/src/boscoin.io/sebak
-RUN git clone https://github.com/bosnet/sebak /go/src/boscoin.io/sebak
-RUN dep ensure
+WORKDIR /sebak
+RUN git clone https://github.com/bosnet/sebak /sebak
+RUN go build boscoin.io/sebak/cmd/sebak
 
 Add ./sebak.crt /sebak.crt
 Add ./sebak.key /sebak.key
 
-
-ADD ./entrypoint.sh /entrypoint.sh
+ADD ./entrypoint.from-source.sh /entrypoint.sh
 
 RUN ( \
     chmod 755 /entrypoint.sh; \

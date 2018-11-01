@@ -5,23 +5,21 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV TERM=xterm
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN ( \
-    apk --no-cache add git; \
+    apk --no-cache add git gcc musl-dev; \
 )
 
-RUN go get github.com/golang/dep/cmd/dep
+WORKDIR /sebak
+RUN git clone https://github.com/bosnet/sebak /sebak
 
-WORKDIR /go/src/boscoin.io/sebak
-RUN git clone https://github.com/bosnet/sebak /go/src/boscoin.io/sebak
-RUN dep ensure
-
-RUN go install boscoin.io/sebak/cmd/sebak
+RUN go build boscoin.io/sebak/cmd/sebak
 
 ################################################################################
 FROM golang:alpine as final
 
-COPY --from=builder /go/bin/sebak /sebak
+COPY --from=builder /sebak/sebak /sebak
 Add ./sebak.crt /sebak.crt
 Add ./sebak.key /sebak.key
 
