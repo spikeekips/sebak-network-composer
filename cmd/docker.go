@@ -345,7 +345,7 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode, genesis string, commonKeypair 
 		containerConfig,
 		containerHostConfig,
 		&network.NetworkingConfig{},
-		getContainerName(nd),
+		makeContainerName(nd),
 	)
 	if err != nil {
 		log.Error("failed to create container", "error", err)
@@ -362,6 +362,6 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode, genesis string, commonKeypair 
 	return
 }
 
-func getContainerName(nd *node.LocalNode) string {
+func makeContainerName(nd *node.LocalNode) string {
 	return fmt.Sprintf("%s%s", dockerContainerNamePrefix, nd.Alias()[:4])
 }

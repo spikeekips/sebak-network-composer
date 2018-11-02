@@ -194,7 +194,7 @@ func init() {
 					}
 					for _, dh := range config.DockerHosts {
 						for _, nd := range dh.Nodes {
-							name := getContainerName(nd)
+							name := makeContainerName(nd)
 							if info, ok := infos[name]; ok && info.State == "exited" {
 								continue
 							}
@@ -220,7 +220,7 @@ func init() {
 
 			for _, dh := range config.DockerHosts {
 				for _, nd := range dh.Nodes {
-					name := getContainerName(nd)
+					name := makeContainerName(nd)
 					if info, ok := infos[name]; ok && info.State != "exited" {
 						continue
 					}

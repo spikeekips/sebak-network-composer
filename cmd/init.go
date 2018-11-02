@@ -21,8 +21,9 @@ const (
 )
 
 var (
-	log    logging.Logger
-	config *Config
+	log            logging.Logger
+	config         *Config
+	maxLogsVerbose int64 = 10000
 
 	flagNumberOfNodes   uint
 	flagLogLevel        string = defaultLogLevel.String()
@@ -31,6 +32,9 @@ var (
 	flagForceClean      bool   = false
 	flagBuildFromSource bool
 	flagVerbose         bool
+	flagOutputDirectory string
+	flagLogsSince       string
+	flagLogsTail        string
 )
 
 var rootCmd = &cobra.Command{

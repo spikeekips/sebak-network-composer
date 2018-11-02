@@ -20,10 +20,6 @@ var (
 )
 
 func parseNodeInoFlags() {
-	if len(flagImageName) < 1 {
-		PrintFlagsError(buildCmd, "--image", fmt.Errorf("empty image name"))
-	}
-
 	{
 		var err error
 		var logLevel logging.Lvl
@@ -126,7 +122,6 @@ func init() {
 	}
 
 	nodeInfoCmd.Flags().StringVar(&flagLogLevel, "log-level", flagLogLevel, "log level, {crit, error, warn, info, debug}")
-	nodeInfoCmd.Flags().StringVar(&flagImageName, "image", flagImageName, "docker image name for sebak")
 	nodeInfoCmd.Flags().BoolVar(&flagVerbose, "verbose", flagVerbose, "verbose")
 
 	rootCmd.AddCommand(nodeInfoCmd)

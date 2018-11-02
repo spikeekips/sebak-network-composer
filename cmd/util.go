@@ -226,6 +226,12 @@ type Config struct {
 	DockerPath  string                `toml:"docker-path"`
 	Hosts       map[string]DockerHost `toml:"hosts"`
 	DockerHosts []*DockerHost
+	dockerHosts map[string]*DockerHost
+}
+
+func (c *Config) GetDockerHost(host string) (dh *DockerHost, found bool) {
+	dh, found = c.dockerHosts[host]
+	return
 }
 
 func parseConfig(f string) (conf *Config, err error) {
@@ -264,6 +270,8 @@ func parseConfig(f string) (conf *Config, err error) {
 		conf.DockerHosts = append(conf.DockerHosts, m[k])
 	}
 
+	conf.dockerHosts = m
+
 	return
 }
 
@@ -290,4 +298,12 @@ func HTTPGet(u string) (body []byte, err error) {
 	}
 
 	return
+}
+
+func GetContainerName(s []string) string {
+	if len(s) < 1 {
+		return ""
+	}
+
+	return s[0][1:]
 }

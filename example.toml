@@ -22,3 +22,7 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
+  env = [
+    "SEBAK_RATE_LIMIT_API=0-s",
+    "SEBAK_RATE_LIMIT_NODE=0-s"
+  ]
