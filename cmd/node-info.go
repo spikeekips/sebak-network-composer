@@ -112,10 +112,12 @@ func init() {
 					log.Error("failed to get response", "endpoint", endpoint)
 				}
 				if flagVerbose {
+					fmt.Println(string(b))
+				} else {
 					var m map[string]interface{}
 					json.Unmarshal(b, &m)
 					b, _ = json.Marshal(m)
-					fmt.Printf("%s == %s\n", endpoint, string(b))
+					fmt.Println(string(b))
 				}
 			}
 		},

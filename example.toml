@@ -9,7 +9,7 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   host = "tcp://54.180.8.229:2376"
   cert = "~/.docker/machine/machines/ex-seoul0"
   volume = [
-    "/home/ubuntu/sebak/631-noisy-color-log:/sebak"
+    "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
   env = [
     "SEBAK_RATE_LIMIT_API=0-s",
@@ -20,7 +20,7 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   host = "tcp://52.79.243.48:2376"
   cert = "~/.docker/machine/machines/ex-seoul1"
   volume = [
-    "/home/ubuntu/sebak/631-noisy-color-log:/sebak"
+    "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
   env = [
     "SEBAK_RATE_LIMIT_API=0-s",
