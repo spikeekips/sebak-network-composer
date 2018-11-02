@@ -148,9 +148,10 @@ func init() {
 
 			if flagVerbose {
 				for _, c := range containerNames {
-					fmt.Printf("= %s =======================================================================\n", c)
+					fname := filepath.Join(flagOutputDirectory, c+".log")
+					fmt.Printf("= %s ================\n", fname)
 
-					f, _ := os.Open(filepath.Join(flagOutputDirectory, c+".log"))
+					f, _ := os.Open(fname)
 					fi, _ := f.Stat()
 
 					n := fi.Size() - maxLogsVerbose
@@ -193,8 +194,9 @@ func init() {
 		"output directory",
 	)
 	logsCmd.Flags().StringVar(&flagLogsSince, "since", flagLogsSince, "since")
-	logsCmd.Flags().StringVar(&flagLogsTail, "tail", flagLogsTail, "tail")
 	logsCmd.Flags().BoolVar(&flagVerbose, "verbose", flagVerbose, "verbose")
+	logsCmd.Flags().StringVar(&flagLogsTail, "tail", flagLogsTail, "tail")
+	logsCmd.Flags().StringVar(&flagLogsHead, "head", flagLogsHead, "head")
 
 	rootCmd.AddCommand(logsCmd)
 }

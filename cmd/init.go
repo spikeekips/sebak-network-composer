@@ -35,6 +35,7 @@ var (
 	flagOutputDirectory string
 	flagLogsSince       string
 	flagLogsTail        string
+	flagLogsHead        string
 )
 
 var rootCmd = &cobra.Command{
