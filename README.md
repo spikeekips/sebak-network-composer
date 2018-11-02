@@ -28,15 +28,22 @@ $ sebak-network-composer run \
     --log-level debug \
     --sebak-log-level debug \
     --n 4 \
-    example.toml
+    config.toml
 ```
 
-This will read the configuration from `example.toml` and deploy nodes.
+This will read the configuration from `config.toml` and deploy nodes.
+
+
+### Download Docker Logs
+
+```sh
+$ sebak-network-composer  logs config.toml --ouput-directory /tmp/
+```
 
 ### Node Info
 
 ```
-$ sebak-network-composer node-info example.toml  | jq -r '[.node.endpoint, .block.height] | "endpoint=\(.[0]) block-height=\(.[1])"'
+$ sebak-network-composer node-info config.toml  | jq -r '[.node.endpoint, .block.height] | "endpoint=\(.[0]) block-height=\(.[1])"'
 https://172.31.22.130:12001 161
 https://172.31.22.130:12000 161
 https://172.31.25.219:12001 161
@@ -44,7 +51,7 @@ https://172.31.25.219:12000 161
 ```
 
 ```
-$ sebak-network-composer node-info example.toml  --verbose | pbcopy
+$ sebak-network-composer node-info config.toml  --verbose | pbcopy
 ```
 ```json
 {
