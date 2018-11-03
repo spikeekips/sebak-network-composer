@@ -17,7 +17,6 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
-	"github.com/stellar/go/keypair"
 )
 
 func findContainersByPrefix(cli *client.Client, p string) (containers []types.Container, err error) {
@@ -255,7 +254,7 @@ func runContainerGettingIP(cli *client.Client) (ip string, err error) {
 	return
 }
 
-func runSEBAK(dh *DockerHost, nd *node.LocalNode, genesis string, commonKeypair *keypair.Full) (id string, err error) {
+func runSEBAK(dh *DockerHost, nd *node.LocalNode) (id string, err error) {
 	cli := dh.Client()
 
 	ctx := context.Background()
@@ -280,7 +279,7 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode, genesis string, commonKeypair 
 	}
 
 	if len(imageID) < 1 {
-		err = fmt.Errorf("image not found", flagImageName)
+		err = fmt.Errorf("image not found")
 		log.Error("failed to find the image", "image", flagImageName, "error", err)
 		return
 	}
@@ -304,8 +303,8 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode, genesis string, commonKeypair 
 		fmt.Sprintf("SEBAK_NETWORK_ID=%s", networkID),
 		fmt.Sprintf("SEBAK_BIND=%s", bindEndpoint.String()),
 		fmt.Sprintf("SEBAK_PUBLISH=%s", nd.Endpoint().String()),
-		fmt.Sprintf("SEBAK_GENESIS_BLOCK=%s", genesis),
-		fmt.Sprintf("SEBAK_COMMON_ACCOUNT=%s", commonKeypair.Seed()),
+		fmt.Sprintf("SEBAK_GENESIS_BLOCK=%s", config.Genesis),
+		fmt.Sprintf("SEBAK_COMMON_ACCOUNT=%s", config.Common),
 		fmt.Sprintf("SEBAK_VALIDATORS=self %s", strings.Join(env_validators, " ")),
 	}
 	envs = append(envs, dh.Env...)

@@ -171,11 +171,9 @@ func init() {
 			// compose network
 			nodes := composeNetwork()
 
-			commonKeypair, _ := keypair.Random()
-
 			for _, dh := range config.DockerHosts {
 				for _, nd := range dh.Nodes {
-					_, err := runSEBAK(dh, nd, config.Genesis, commonKeypair)
+					_, err := runSEBAK(dh, nd)
 					if err != nil {
 						log.Error("failed to run container", "error", err)
 						os.Exit(1)

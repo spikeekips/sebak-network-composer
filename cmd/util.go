@@ -20,6 +20,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/tlsconfig"
 	"github.com/spf13/cobra"
+	"github.com/stellar/go/keypair"
 )
 
 type FlagEnv []string
@@ -223,6 +224,7 @@ func Ticker() chan bool {
 
 type Config struct {
 	Genesis     string                `toml:"genesis"`
+	Common      string                `toml:"common"`
 	DockerPath  string                `toml:"docker-path"`
 	Hosts       map[string]DockerHost `toml:"hosts"`
 	DockerHosts []*DockerHost
@@ -272,6 +274,17 @@ func parseConfig(f string) (conf *Config, err error) {
 
 	conf.dockerHosts = m
 
+	if len(conf.Genesis) < 1 {
+		kp, _ := keypair.Random()
+		conf.Genesis = kp.Address()
+		fmt.Println("genesis keypair created", "seed", kp.Seed(), "address", kp.Address())
+	}
+	if len(conf.Common) < 1 {
+		kp, _ := keypair.Random()
+		conf.Common = kp.Address()
+		fmt.Println("common keypair created", "seed", kp.Seed(), "address", kp.Address())
+	}
+
 	return
 }
 
@@ -289,7 +302,7 @@ func HTTPGet(u string) (body []byte, err error) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		err = fmt.Errorf("failed to get", "status", resp.StatusCode)
+		err = fmt.Errorf("failed to get; status=%v", resp.StatusCode)
 		return
 	}
 
