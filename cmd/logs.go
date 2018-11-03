@@ -189,7 +189,7 @@ func init() {
 	logsCmd.Flags().StringVar(&flagLogLevel, "log-level", flagLogLevel, "log level, {crit, error, warn, info, debug}")
 	logsCmd.Flags().StringVar(
 		&flagOutputDirectory,
-		"ouput-directory",
+		"output-directory",
 		fmt.Sprintf("%s/%s", currentDirectory, time.Now().Format("20060102T150405")),
 		"output directory",
 	)
