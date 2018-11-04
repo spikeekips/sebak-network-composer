@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"io"
@@ -73,8 +74,17 @@ func getContainerLogs(cli *client.Client, id, path string) error {
 		return err
 	}
 
-	_, err = io.Copy(output, reader)
-	if err != nil && err != io.EOF {
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		b := scanner.Bytes()
+		if len(b) < 8 {
+			b = []byte{}
+		} else {
+			b = b[8:]
+		}
+		output.Write(append(b, []byte("\n")...))
+	}
+	if err := scanner.Err(); err != nil {
 		return err
 	}
 
