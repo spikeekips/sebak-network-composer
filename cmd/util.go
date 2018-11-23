@@ -14,13 +14,14 @@ import (
 	"strings"
 	"time"
 
-	"boscoin.io/sebak/lib/node"
 	"github.com/BurntSushi/toml"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/tlsconfig"
 	"github.com/spf13/cobra"
 	"github.com/stellar/go/keypair"
+
+	"boscoin.io/sebak/lib/node"
 )
 
 type FlagEnv []string
@@ -121,10 +122,12 @@ func (v *Volume) UnmarshalText(b []byte) error {
 }
 
 type DockerHost struct {
-	Host   string   `toml:"host"`
-	Cert   string   `toml:"cert"`
-	Volume []Volume `toml:"volume"`
-	Env    []string `toml:"env"`
+	Host    string   `toml:"host"`
+	Ca      string   `toml:"ca"`
+	Cert    string   `toml:"cert"`
+	CertKey string   `toml:"cert_key"`
+	Volume  []Volume `toml:"volume"`
+	Env     []string `toml:"env"`
 
 	client *client.Client
 	IP     string
@@ -145,26 +148,32 @@ func (dh *DockerHost) CheckClient() (err error) {
 		return
 	}
 
+	if len(dh.Ca) < 1 {
+		err = fmt.Errorf("`ca` is missing")
+		return
+	}
+
 	if len(dh.Cert) < 1 {
 		err = fmt.Errorf("`cert` is missing")
 		return
 	}
-	if strings.HasPrefix(dh.Cert, "~") {
-		u, _ := user.Current()
-		if len(dh.Cert) < 3 {
-			dh.Cert = u.HomeDir
-		} else {
-			dh.Cert = filepath.Join(u.HomeDir, dh.Cert[2:])
-		}
+
+	if len(dh.CertKey) < 1 {
+		err = fmt.Errorf("`cert_key` is missing")
+		return
 	}
+
+	dh.Ca = patchHomeDir(dh.Ca)
+	dh.Cert = patchHomeDir(dh.Cert)
+	dh.CertKey = patchHomeDir(dh.CertKey)
 
 	u.RawQuery = ""
 	dh.Host = u.String()
 
 	options := tlsconfig.Options{
-		CAFile:             filepath.Join(dh.Cert, "ca.pem"),
-		CertFile:           filepath.Join(dh.Cert, "cert.pem"),
-		KeyFile:            filepath.Join(dh.Cert, "key.pem"),
+		CAFile:             dh.Ca,
+		CertFile:           dh.Cert,
+		KeyFile:            dh.CertKey,
 		InsecureSkipVerify: os.Getenv("DOCKER_TLS_VERIFY") == "",
 	}
 
@@ -255,10 +264,12 @@ func parseConfig(f string) (conf *Config, err error) {
 	var keys []string
 	for _, h := range conf.Hosts {
 		dh := &DockerHost{
-			Host:   h.Host,
-			Cert:   h.Cert,
-			Volume: h.Volume,
-			Env:    h.Env,
+			Host:    h.Host,
+			Ca:      h.Ca,
+			Cert:    h.Cert,
+			CertKey: h.CertKey,
+			Volume:  h.Volume,
+			Env:     h.Env,
 		}
 		if err = dh.CheckClient(); err != nil {
 			return
@@ -319,4 +330,13 @@ func GetContainerName(s []string) string {
 	}
 
 	return s[0][1:]
+}
+
+func patchHomeDir(s string) string {
+	if !strings.HasPrefix(s, "~") {
+		return s
+	}
+
+	u, _ := user.Current()
+	return filepath.Join(u.HomeDir, s[2:])
 }

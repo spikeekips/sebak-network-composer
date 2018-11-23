@@ -7,7 +7,9 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
 [hosts]
   [hosts.seoul0]
   host = "tcp://54.180.8.229:2376"
-  cert = "~/.docker/machine/machines/ex-seoul0"
+  ca = "~/.docker/machine/machines/ex-seoul0/ca.pem"
+  cert = "~/.docker/machine/machines/ex-seoul0/cert.pem"
+  cert_key = "~/.docker/machine/machines/ex-seoul0/key.pem"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
@@ -18,7 +20,9 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
 
   [hosts.seoul1]
   host = "tcp://52.79.243.48:2376"
-  cert = "~/.docker/machine/machines/ex-seoul1"
+  ca = "~/.docker/machine/machines/ex-seoul1/ca.pem"
+  cert = "~/.docker/machine/machines/ex-seoul1/cert.pem"
+  cert_key = "~/.docker/machine/machines/ex-seoul1/key.pem"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
