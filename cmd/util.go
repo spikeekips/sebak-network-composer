@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -279,6 +280,7 @@ func parseConfig(f string) (conf *Config, err error) {
 		keys = append(keys, dh.Host)
 	}
 
+	sort.Strings(keys)
 	for _, k := range keys {
 		conf.DockerHosts = append(conf.DockerHosts, m[k])
 	}
