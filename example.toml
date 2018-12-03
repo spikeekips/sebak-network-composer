@@ -13,6 +13,10 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
+  seeds = [
+      "SA47LSG4K6BVSSO3P2KKGJVA27I3ZA4DLIBPBTU7H462P5OW7ZDADAJL",
+      "SCEWJ34WZ7N3TK5HBHLEQG3SSLHYMOHYWYAD2T7H6FM3NWBGHXAWBW6H",
+  ]
   env = [
     "SEBAK_RATE_LIMIT_API=0-s",
     "SEBAK_RATE_LIMIT_NODE=0-s"
@@ -25,6 +29,10 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   cert_key = "~/.docker/machine/machines/ex-seoul1/key.pem"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
+  ]
+  seeds = [
+      "SDQQG2CSBFUMGOMONAIZ76FXJ66GAMSDKF4NNA5SSFTZ55VXMAVIVBQS",
+      "SD44LOPM2RPYHFJDPQWDSKWLL7ESOMOPOI27X3OANOBH5JLYQPVPJVMX",
   ]
   env = [
     "SEBAK_RATE_LIMIT_API=0-s",

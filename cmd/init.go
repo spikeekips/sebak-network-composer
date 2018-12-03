@@ -25,7 +25,6 @@ var (
 	config         *Config
 	maxLogsVerbose int64 = 10000
 
-	flagNumberOfNodes   uint
 	flagLogLevel        string = defaultLogLevel.String()
 	flagSebakLogLevel   string = defaultSebakLogLevel.String()
 	flagImageName       string = defaultDockerImageName

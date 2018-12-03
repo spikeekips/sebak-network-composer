@@ -15,7 +15,6 @@ import (
 	logging "github.com/inconshreveable/log15"
 	isatty "github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/keypair"
 )
 
 var (
@@ -54,39 +53,26 @@ func parseRunFlags() {
 	log.Debug("Starting to compose sebak network")
 	log.Debug(fmt.Sprintf(
 		`
-number of nodes: %d
       log level: %s
 sebak log level: %s
 		`,
-		flagNumberOfNodes,
 		flagLogLevel,
 		flagSebakLogLevel,
 	))
 }
 
 func composeNetwork() map[string]*node.LocalNode {
-	log.Debug("trying to compose network", "number of nodes", flagNumberOfNodes)
-
-	var t int
-	nc := int(flagNumberOfNodes) / len(config.DockerHosts)
-	t = nc
-	if int(flagNumberOfNodes)%len(config.DockerHosts) != 0 {
-		t = nc + 1
+	var numberOfNodes int
+	for _, dh := range config.DockerHosts {
+		numberOfNodes += len(dh.Keys)
 	}
+
+	log.Debug("trying to compose network", "number of nodes", numberOfNodes)
 
 	nodes := map[string]*node.LocalNode{}
 	for i, dh := range config.DockerHosts {
-		if len(nodes) >= int(flagNumberOfNodes) {
-			break
-		}
-
 		var port int = baseContainerPort
-		for j := 0; j < t; j++ {
-			if len(nodes) >= int(flagNumberOfNodes) {
-				break
-			}
-
-			kp, _ := keypair.Random()
+		for _, kp := range dh.Keys {
 			endpoint, err := common.NewEndpointFromString(fmt.Sprintf(
 				"https://%s:%d",
 				dh.IP,
@@ -96,7 +82,7 @@ func composeNetwork() map[string]*node.LocalNode {
 				PrintError(runCmd, err)
 			}
 
-			nd, err := node.NewLocalNode(kp, endpoint, fmt.Sprintf("n%d-%d", i, j))
+			nd, err := node.NewLocalNode(kp, endpoint, "")
 			if err != nil {
 				PrintError(runCmd, err)
 			}
@@ -263,7 +249,6 @@ func init() {
 		},
 	}
 
-	runCmd.Flags().UintVar(&flagNumberOfNodes, "n", 3, "number of node")
 	runCmd.Flags().StringVar(&flagImageName, "image", flagImageName, "docker image name for sebak")
 	runCmd.Flags().BoolVar(
 		&flagForceClean,

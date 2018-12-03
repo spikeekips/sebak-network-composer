@@ -27,7 +27,6 @@ $ sebak-network-composer run \
     --force \
     --log-level debug \
     --sebak-log-level debug \
-    --n 4 \
     config.toml
 ```
 
@@ -138,6 +137,7 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
   volume = [
     "/home/ubuntu/sebak/take-1-not-save-operation:/sebak"
   ]
+  seeds = ["SA47LSG4K6BVSSO3P2KKGJVA27I3ZA4DLIBPBTU7H462P5OW7ZDADAJL"]
   env = [
     "SEBAK_RATE_LIMIT_API=0-s",
     "SEBAK_RATE_LIMIT_NODE=0-s"
@@ -152,4 +152,4 @@ genesis = "GAPYEQH7MC5SGA7MLLWOKBEXFXPOM34APVQRW6OWBDMH5G3KDRJ66IQQ"
 * `cert`: cert files for docker client
 * `volume`: set the mount volumes for docker container
 * `env`: set the environmental variables for docker container
-
+* `seeds`: list of node address

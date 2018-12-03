@@ -20,8 +20,8 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/tlsconfig"
 	"github.com/spf13/cobra"
-	"github.com/stellar/go/keypair"
 
+	"boscoin.io/sebak/lib/common/keypair"
 	"boscoin.io/sebak/lib/node"
 )
 
@@ -129,10 +129,12 @@ type DockerHost struct {
 	CertKey string   `toml:"cert_key"`
 	Volume  []Volume `toml:"volume"`
 	Env     []string `toml:"env"`
+	Seeds   []string `toml:"seeds"`
 
 	client *client.Client
 	IP     string
 	Nodes  []*node.LocalNode
+	Keys   []*keypair.Full
 }
 
 func NewDockerHostFromURI(uri string) (dh *DockerHost, err error) {
@@ -264,6 +266,15 @@ func parseConfig(f string) (conf *Config, err error) {
 	m := map[string]*DockerHost{}
 	var keys []string
 	for _, h := range conf.Hosts {
+		var kp *keypair.Full
+		var keys []*keypair.Full
+		for _, s := range h.Seeds {
+			if kp, err = keypair.Parse(s); err != nil {
+				return
+			}
+			keys = append(keys, kp)
+		}
+
 		dh := &DockerHost{
 			Host:    h.Host,
 			Ca:      h.Ca,
@@ -271,6 +282,7 @@ func parseConfig(f string) (conf *Config, err error) {
 			CertKey: h.CertKey,
 			Volume:  h.Volume,
 			Env:     h.Env,
+			Keys:    kp,
 		}
 		if err = dh.CheckClient(); err != nil {
 			return
@@ -288,12 +300,12 @@ func parseConfig(f string) (conf *Config, err error) {
 	conf.dockerHosts = m
 
 	if len(conf.Genesis) < 1 {
-		kp, _ := keypair.Random()
+		kp := keypair.Random()
 		conf.Genesis = kp.Address()
 		fmt.Println("genesis keypair created", "seed", kp.Seed(), "address", kp.Address())
 	}
 	if len(conf.Common) < 1 {
-		kp, _ := keypair.Random()
+		kp := keypair.Random()
 		conf.Common = kp.Address()
 		fmt.Println("common keypair created", "seed", kp.Seed(), "address", kp.Address())
 	}
