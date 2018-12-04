@@ -1,7 +1,7 @@
 module github.com/spikeekips/sebak-network-composer
 
 require (
-	boscoin.io/sebak v0.0.0-20181203051028-fc69c7e7c4e2
+	boscoin.io/sebak v0.0.0-20181204150640-413296566828
 	github.com/BurntSushi/toml v0.3.1
 	github.com/Microsoft/go-winio v0.3.8
 	github.com/Sirupsen/logrus v0.11.0
@@ -34,11 +34,11 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/prometheus/client_golang v0.9.1 // indirect
 	github.com/prometheus/common v0.0.0-20181126121408-4724e9255275 // indirect
-	github.com/prometheus/procfs v0.0.0-20181129180645-aa55a523dc0a // indirect
+	github.com/prometheus/procfs v0.0.0-20181204211112-1dc9a6cbc91a // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3
-	github.com/stellar/go v0.0.0-20181130145331-717a36167d9e
+	github.com/stellar/go v0.0.0-20181203144432-c2d8566850ab
 	github.com/stellar/go-xdr v0.0.0-20180917104419-0bc96f33a18e
 	github.com/syndtr/goleveldb v0.0.0-20181128100959-b001fa50d6b2 // indirect
 	github.com/ulule/limiter v2.2.1+incompatible // indirect

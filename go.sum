@@ -3,6 +3,8 @@ boscoin.io/sebak v0.0.0-20181122142625-e076904d276c h1:yOpTXiHg9UoNmwBE14r2w9LVf
 boscoin.io/sebak v0.0.0-20181122142625-e076904d276c/go.mod h1:S7k7wMMzuRvEj9LX16UmowjQQ3Zyvr4vL4QYneH61Y0=
 boscoin.io/sebak v0.0.0-20181203051028-fc69c7e7c4e2 h1:tYl0RlDX2Qi62Sx8XQAGGIi9vmp6qJ+iM+LyZIiBNno=
 boscoin.io/sebak v0.0.0-20181203051028-fc69c7e7c4e2/go.mod h1:6DUha3HFzJQqBOvyhtkg6de2228W5MUMDEbahRzzKHA=
+boscoin.io/sebak v0.0.0-20181204150640-413296566828 h1:WUUweUgHtomNhWse8UgZxRBmHXYjFjJ3wW7sQaxYjqM=
+boscoin.io/sebak v0.0.0-20181204150640-413296566828/go.mod h1:6DUha3HFzJQqBOvyhtkg6de2228W5MUMDEbahRzzKHA=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/GianlucaGuarini/go-observable v0.0.0-20180829201609-d386f0081a66/go.mod h1:2pqNiwoZ8Fj1HBGWyPTXW/iPD332sJzTp3Iy0dIcFMc=
@@ -103,6 +105,7 @@ github.com/prometheus/common v0.0.0-20181126121408-4724e9255275/go.mod h1:daVV7q
 github.com/prometheus/procfs v0.0.0-20180725123919-05ee40e3a273/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20181005140218-185b4288413d/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20181129180645-aa55a523dc0a/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
+github.com/prometheus/procfs v0.0.0-20181204211112-1dc9a6cbc91a/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/satori/go.uuid v1.2.0 h1:0uYX9dsZ2yD7q2RtLRtPSdGDWzjeM3TbMJP9utgA0ww=
 github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
 github.com/spf13/cobra v0.0.3 h1:ZlrZ4XsMRm04Fr5pSFxBgfND2EBVa1nLpiy1stUsX/8=
@@ -116,6 +119,8 @@ github.com/stellar/go v0.0.0-20181115130144-a3adccc13711 h1:NtVmvgvfCLxj4l5JxlCx
 github.com/stellar/go v0.0.0-20181115130144-a3adccc13711/go.mod h1:Kkro8X6IWn/5XtSicGd6N2LZKMKUCWS5wS5Ctjh6+Vw=
 github.com/stellar/go v0.0.0-20181130145331-717a36167d9e h1:MYRTGbrJ+LuH94gG0cVFdVoU46+S2iPPjxVulSGx0Zc=
 github.com/stellar/go v0.0.0-20181130145331-717a36167d9e/go.mod h1:Kkro8X6IWn/5XtSicGd6N2LZKMKUCWS5wS5Ctjh6+Vw=
+github.com/stellar/go v0.0.0-20181203144432-c2d8566850ab h1:VDOp/2vwA2SL3It1LR4beojY4aXn2Zrsaa3hAQEmv74=
+github.com/stellar/go v0.0.0-20181203144432-c2d8566850ab/go.mod h1:Kkro8X6IWn/5XtSicGd6N2LZKMKUCWS5wS5Ctjh6+Vw=
 github.com/stellar/go-xdr v0.0.0-20180917104419-0bc96f33a18e h1:n/hfey8pO+RYMoGXyvyzuw5pdO8IFDoyAL/g5OiCesY=
 github.com/stellar/go-xdr v0.0.0-20180917104419-0bc96f33a18e/go.mod h1:gpOLVzy6TVYTQ3LvHSN9RJC700FkhFCpSE82u37aNRM=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=

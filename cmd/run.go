@@ -70,7 +70,7 @@ func composeNetwork() map[string]*node.LocalNode {
 	log.Debug("trying to compose network", "number of nodes", numberOfNodes)
 
 	nodes := map[string]*node.LocalNode{}
-	for i, dh := range config.DockerHosts {
+	for _, dh := range config.DockerHosts {
 		var port int = baseContainerPort
 		for _, kp := range dh.Keys {
 			endpoint, err := common.NewEndpointFromString(fmt.Sprintf(

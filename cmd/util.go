@@ -264,15 +264,19 @@ func parseConfig(f string) (conf *Config, err error) {
 	}
 
 	m := map[string]*DockerHost{}
-	var keys []string
+	var hosts []string
 	for _, h := range conf.Hosts {
-		var kp *keypair.Full
 		var keys []*keypair.Full
 		for _, s := range h.Seeds {
+			var kp keypair.KP
 			if kp, err = keypair.Parse(s); err != nil {
 				return
+			} else if full, ok := kp.(*keypair.Full); !ok {
+				err = fmt.Errorf("public address found")
+				return
+			} else {
+				keys = append(keys, full)
 			}
-			keys = append(keys, kp)
 		}
 
 		dh := &DockerHost{
@@ -282,18 +286,18 @@ func parseConfig(f string) (conf *Config, err error) {
 			CertKey: h.CertKey,
 			Volume:  h.Volume,
 			Env:     h.Env,
-			Keys:    kp,
+			Keys:    keys,
 		}
 		if err = dh.CheckClient(); err != nil {
 			return
 		}
 
 		m[dh.Host] = dh
-		keys = append(keys, dh.Host)
+		hosts = append(hosts, dh.Host)
 	}
 
-	sort.Strings(keys)
-	for _, k := range keys {
+	sort.Strings(hosts)
+	for _, k := range hosts {
 		conf.DockerHosts = append(conf.DockerHosts, m[k])
 	}
 
