@@ -51,8 +51,8 @@ func parseNodeInoFlags() {
 
 func init() {
 	nodeInfoCmd = &cobra.Command{
-		Use:   "node-info <config>",
-		Short: "node-info running sebak nodes",
+		Use:   "node <config>",
+		Short: "running sebak nodes",
 		Args:  cobra.ExactArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			var err error
