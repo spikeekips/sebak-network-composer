@@ -7,6 +7,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"boscoin.io/sebak/lib/common"
@@ -16,6 +18,8 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/archive"
+	"github.com/docker/docker/pkg/system"
 	"github.com/docker/go-connections/nat"
 )
 
@@ -363,4 +367,56 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode) (id string, err error) {
 
 func makeContainerName(nd *node.LocalNode) string {
 	return fmt.Sprintf("%s%s", dockerContainerNamePrefix, nd.Alias()[:4])
+}
+
+func copyFromContainer(cli *client.Client, containerID, srcPath, destPath string) error {
+	if absPath, err := filepath.Abs(destPath); err != nil {
+		return err
+	} else {
+		destPath = archive.PreserveTrailingDotOrSeparator(absPath, destPath)
+	}
+
+	if _, err := os.Stat(destPath); !os.IsNotExist(err) {
+		return fmt.Errorf("destPath already exists: '%s'", destPath)
+	}
+	if err := os.MkdirAll(destPath, os.FileMode(0755)); err != nil {
+		return err
+	}
+
+	var rebaseName string
+	ctx, _ := context.WithCancel(context.Background())
+	srcStat, err := cli.ContainerStatPath(ctx, containerID, srcPath)
+	if err == nil && srcStat.Mode&os.ModeSymlink != 0 {
+		linkTarget := srcStat.LinkTarget
+		if !system.IsAbs(linkTarget) {
+			srcParent, _ := archive.SplitPathDirEntry(srcPath)
+			linkTarget = filepath.Join(srcParent, linkTarget)
+		}
+
+		linkTarget, rebaseName = archive.GetRebaseName(srcPath, linkTarget)
+		srcPath = linkTarget
+	}
+
+	reader, stat, err := cli.CopyFromContainer(context.Background(), containerID, srcPath)
+	if err != nil {
+		return err
+	}
+	defer reader.Close()
+
+	srcInfo := archive.CopyInfo{
+		Path:       srcPath,
+		Exists:     true,
+		IsDir:      stat.Mode.IsDir(),
+		RebaseName: rebaseName,
+	}
+
+	preArchive := reader
+	if len(srcInfo.RebaseName) != 0 {
+		_, srcBase := archive.SplitPathDirEntry(srcInfo.Path)
+		preArchive = archive.RebaseArchiveEntries(reader, srcBase, srcInfo.RebaseName)
+	}
+
+	archive.CopyTo(preArchive, srcInfo, destPath)
+
+	return nil
 }

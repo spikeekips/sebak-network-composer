@@ -31,6 +31,7 @@ var (
 	flagForceClean      bool   = false
 	flagBuildFromSource bool
 	flagVerbose         bool
+	flagSourceDirectory string
 	flagOutputDirectory string
 	flagLogsSince       string
 	flagLogsTail        string
