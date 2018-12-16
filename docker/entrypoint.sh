@@ -3,9 +3,11 @@
 set -e
 set -x
 
-export SEBAK_STORAGE="file:///tmp/db/${SEBAK_NODE_ALIAS}"
-
 env | sort
+
+if [ ${SEBAK_INITIALIZE} -eq 1 ];then
+    rm -rf $(echo $SEBAK_STORAGE | sed -e 's@file://@@g')/* || true
+fi
 
 /sebak genesis ${SEBAK_GENESIS_BLOCK} ${SEBAK_COMMON_ACCOUNT} || true
 
