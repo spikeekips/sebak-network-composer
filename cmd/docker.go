@@ -288,10 +288,14 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode) (id string, err error) {
 		return
 	}
 
-	var env_validators []string
+	var env_validators, env_discovery []string
 	for _, v := range nd.GetValidators() {
-		s := fmt.Sprintf("%s?address=%s", v.Endpoint(), v.Address())
-		env_validators = append(env_validators, s)
+		if nd.Address() == v.Address() {
+			continue
+		}
+
+		env_validators = append(env_validators, v.Address())
+		env_discovery = append(env_discovery, v.Endpoint().String())
 	}
 
 	_, port, _ := net.SplitHostPort(nd.Endpoint().Host)
@@ -310,6 +314,7 @@ func runSEBAK(dh *DockerHost, nd *node.LocalNode) (id string, err error) {
 		fmt.Sprintf("SEBAK_GENESIS_BLOCK=%s", config.Genesis),
 		fmt.Sprintf("SEBAK_COMMON_ACCOUNT=%s", config.Common),
 		fmt.Sprintf("SEBAK_VALIDATORS=self %s", strings.Join(env_validators, " ")),
+		fmt.Sprintf("SEBAK_DISCOVERY=%s", strings.Join(env_discovery, " ")),
 	}
 	envs = append(envs, dh.Env...)
 

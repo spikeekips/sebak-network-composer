@@ -52,7 +52,7 @@ func parseNodeInoFlags() {
 func init() {
 	nodeInfoCmd = &cobra.Command{
 		Use:   "node <config>",
-		Short: "running sebak nodes",
+		Short: "sebak node info",
 		Args:  cobra.ExactArgs(1),
 		Run: func(c *cobra.Command, args []string) {
 			var err error
